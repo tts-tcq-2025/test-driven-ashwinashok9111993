@@ -3,10 +3,10 @@
 #include <vector>
 
 class StringCalculator {
-public:
+ public:
     int Add(const std::string& numbers);
 
-private:
+ private:
     std::string parseDelimiter(const std::string& numbers);
     bool hasCustomDelimiterFormat(const std::string& numbers);
     std::string extractNumbers(const std::string& numbers);

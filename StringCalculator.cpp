@@ -10,14 +10,14 @@ int StringCalculator::Add(const std::string& numbers) {
     if (numbers.empty()) {
         return 0;
     }
-    
+
     std::string delimiter = parseDelimiter(numbers);
     std::string numbersPart = extractNumbers(numbers);
     std::string normalizedNumbers = normalizeDelimiters(numbersPart, delimiter);
     std::vector<int> nums = parseNumbers(normalizedNumbers);
-    
+
     validateNumbers(nums);
-    
+
     return calculateSum(nums);
 }
 
@@ -25,12 +25,12 @@ std::string StringCalculator::parseDelimiter(const std::string& numbers) {
     if (!hasCustomDelimiterFormat(numbers)) {
         return ",";
     }
-    
+
     size_t newlinePos = numbers.find('\n');
     if (newlinePos == std::string::npos) {
         return ",";
     }
-    
+
     return extractDelimiterFromHeader(numbers.substr(2, newlinePos - 2));
 }
 
@@ -42,13 +42,13 @@ std::string StringCalculator::extractDelimiterFromHeader(const std::string& deli
     if (hasBracketFormat(delimiterPart)) {
         return delimiterPart.substr(1, delimiterPart.length() - 2);
     }
-    
+
     return delimiterPart;
 }
 
 bool StringCalculator::hasBracketFormat(const std::string& delimiterPart) {
-    return delimiterPart.length() >= 2 && 
-           delimiterPart[0] == '[' && 
+    return delimiterPart.length() >= 2 &&
+           delimiterPart[0] == '[' &&
            delimiterPart[delimiterPart.length() - 1] == ']';
 }
 
@@ -56,7 +56,7 @@ std::string StringCalculator::extractNumbers(const std::string& numbers) {
     if (!hasCustomDelimiterFormat(numbers)) {
         return numbers;
     }
-    
+
     return extractNumbersAfterDelimiterHeader(numbers);
 }
 
@@ -65,27 +65,29 @@ std::string StringCalculator::extractNumbersAfterDelimiterHeader(const std::stri
     if (newlinePos == std::string::npos || newlinePos + 1 >= numbers.length()) {
         return numbers;
     }
-    
+
     return numbers.substr(newlinePos + 1);
 }
 
-std::string StringCalculator::normalizeDelimiters(const std::string& numbersPart, const std::string& delimiter) {
+std::string StringCalculator::normalizeDelimiters(const std::string& numbersPart,
+                                                   const std::string& delimiter) {
     std::string result = numbersPart;
-    
+
     if (delimiter != ",") {
         result = replaceDelimiterWithComma(result, delimiter);
     }
-    
+
     std::replace(result.begin(), result.end(), '\n', ',');
-    
+
     return result;
 }
 
-std::string StringCalculator::replaceDelimiterWithComma(const std::string& text, const std::string& delimiter) {
+std::string StringCalculator::replaceDelimiterWithComma(const std::string& text,
+                                                        const std::string& delimiter) {
     std::string escapedDelimiter = delimiter;
     std::regex specialChars(R"([-[\]{}()*+?.,\^$|#\s])");
     escapedDelimiter = std::regex_replace(escapedDelimiter, specialChars, R"(\$&)");
-    
+
     std::regex delimiterRegex(escapedDelimiter);
     return std::regex_replace(text, delimiterRegex, ",");
 }
@@ -94,13 +96,13 @@ std::vector<int> StringCalculator::parseNumbers(const std::string& normalizedNum
     std::vector<int> nums;
     std::stringstream ss(normalizedNumbers);
     std::string num;
-    
+
     while (std::getline(ss, num, ',')) {
         if (!num.empty()) {
             nums.push_back(std::stoi(num));
         }
     }
-    
+
     return nums;
 }
 
@@ -116,7 +118,7 @@ int StringCalculator::calculateSum(const std::vector<int>& nums) {
 
 void StringCalculator::validateNumbers(const std::vector<int>& nums) {
     std::vector<int> negatives = findNegativeNumbers(nums);
-    
+
     if (!negatives.empty()) {
         std::string message = buildNegativeNumbersMessage(negatives);
         throw std::invalid_argument(message);
@@ -125,13 +127,13 @@ void StringCalculator::validateNumbers(const std::vector<int>& nums) {
 
 std::vector<int> StringCalculator::findNegativeNumbers(const std::vector<int>& nums) {
     std::vector<int> negatives;
-    
+
     for (int num : nums) {
         if (num < 0) {
             negatives.push_back(num);
         }
     }
-    
+
     return negatives;
 }
 

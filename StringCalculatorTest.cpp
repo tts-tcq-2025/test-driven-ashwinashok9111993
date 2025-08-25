@@ -1,10 +1,11 @@
 #include <gtest/gtest.h>
+#include <string>
 #include "StringCalculator.h"
 #include <stdexcept>
 #include <tuple>
 
 class StringCalculatorTest : public ::testing::Test {
-protected:
+ protected:
     StringCalculator calculator;
 };
 
@@ -33,7 +34,7 @@ TEST_F(StringCalculatorTest, EmptyStringReturnsZero) {
 
 // Parameterized test for basic addition scenarios
 class BasicAdditionTest : public ::testing::TestWithParam<BasicAdditionData> {
-protected:
+ protected:
     StringCalculator calculator;
 };
 
@@ -60,7 +61,7 @@ INSTANTIATE_TEST_SUITE_P(
 
 // Parameterized test for delimiter scenarios
 class DelimiterTest : public ::testing::TestWithParam<CustomDelimiterData> {
-protected:
+ protected:
     StringCalculator calculator;
 };
 
@@ -76,12 +77,12 @@ INSTANTIATE_TEST_SUITE_P(
         // Newline delimiters
         CustomDelimiterData{"1\n2,3", 6, "mixed newline and comma"},
         CustomDelimiterData{"1\n2\n3,4", 10, "multiple newlines with comma"},
-        
+
         // Custom single-character delimiters
         CustomDelimiterData{"//;\n1;2", 3, "semicolon delimiter"},
         CustomDelimiterData{"//*\n1*2*3", 6, "asterisk delimiter"},
         CustomDelimiterData{"//|\n1|2|3|4", 10, "pipe delimiter"},
-        
+
         // Custom multi-character delimiters
         CustomDelimiterData{"//[***]\n1***2***3", 6, "triple asterisk delimiter"},
         CustomDelimiterData{"//[abc]\n1abc2abc3abc4", 10, "text delimiter"},
@@ -91,7 +92,7 @@ INSTANTIATE_TEST_SUITE_P(
 
 // Parameterized test for large number filtering
 class LargeNumberFilterTest : public ::testing::TestWithParam<BasicAdditionData> {
-protected:
+ protected:
     StringCalculator calculator;
 };
 
@@ -115,19 +116,19 @@ INSTANTIATE_TEST_SUITE_P(
 
 // Parameterized test for negative number validation
 class NegativeNumberTest : public ::testing::TestWithParam<InvalidInputData> {
-protected:
+ protected:
     StringCalculator calculator;
 };
 
 TEST_P(NegativeNumberTest, ThrowsOnNegativeNumbers) {
     const auto& data = GetParam();
-    
+
     try {
         calculator.Add(data.input);
         FAIL() << "Expected std::invalid_argument for: " << data.description;
     } catch (const std::invalid_argument& e) {
         std::string message = e.what();
-        EXPECT_TRUE(message.find("negatives not allowed") != std::string::npos) 
+        EXPECT_TRUE(message.find("negatives not allowed") != std::string::npos)
             << "Message should contain 'negatives not allowed' for: " << data.description;
         EXPECT_TRUE(message.find(data.expectedMessage) != std::string::npos)
             << "Message should contain '" << data.expectedMessage << "' for: " << data.description;
