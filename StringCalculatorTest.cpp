@@ -8,7 +8,7 @@ class StringCalculatorTest : public ::testing::Test {
  protected:
     // Calculator instance for tests
     StringCalculator calculator;
-    
+
     void SetUp() override {
         // Ensure calculator is initialized
         (void)calculator;
@@ -123,7 +123,7 @@ INSTANTIATE_TEST_SUITE_P(
 class NegativeNumberTest : public ::testing::TestWithParam<InvalidInputData> {
  protected:
     StringCalculator calculator;
-    
+
     void SetUp() override {
         // Ensure calculator is initialized
         (void)calculator;
