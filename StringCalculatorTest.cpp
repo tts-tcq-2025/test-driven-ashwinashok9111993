@@ -6,8 +6,8 @@
 
 class StringCalculatorTest : public ::testing::Test {
  protected:
-    // Calculator instance for tests
-    StringCalculator calculator;
+    // cppcheck-suppress unusedStructMember
+    StringCalculator calculator;  // Used in test methods below
 };
 
 // Parameterized test data structures
@@ -115,10 +115,7 @@ INSTANTIATE_TEST_SUITE_P(
 );
 
 // Parameterized test for negative number validation
-class NegativeNumberTest : public ::testing::TestWithParam<InvalidInputData> {
- protected:
-    StringCalculator calculator;
-};
+class NegativeNumberTest : public ParameterizedCalculatorTest<InvalidInputData> {};
 
 TEST_P(NegativeNumberTest, ThrowsOnNegativeNumbers) {
     const auto& data = GetParam();
