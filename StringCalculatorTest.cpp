@@ -6,7 +6,13 @@
 
 class StringCalculatorTest : public ::testing::Test {
  protected:
+    // Calculator instance for tests
     StringCalculator calculator;
+    
+    void SetUp() override {
+        // Ensure calculator is initialized
+        (void)calculator;
+    }
 };
 
 // Parameterized test data structures
@@ -117,6 +123,11 @@ INSTANTIATE_TEST_SUITE_P(
 class NegativeNumberTest : public ::testing::TestWithParam<InvalidInputData> {
  protected:
     StringCalculator calculator;
+    
+    void SetUp() override {
+        // Ensure calculator is initialized
+        (void)calculator;
+    }
 };
 
 TEST_P(NegativeNumberTest, ThrowsOnNegativeNumbers) {

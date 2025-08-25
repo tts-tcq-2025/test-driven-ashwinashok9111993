@@ -5,6 +5,7 @@
 #include <regex>
 #include <sstream>
 #include <algorithm>
+#include <numeric>
 
 int StringCalculator::Add(const std::string& numbers) {
     if (numbers.empty()) {
@@ -107,13 +108,9 @@ std::vector<int> StringCalculator::parseNumbers(const std::string& normalizedNum
 }
 
 int StringCalculator::calculateSum(const std::vector<int>& nums) {
-    int sum = 0;
-    for (int n : nums) {
-        if (n <= 1000) {
-            sum += n;
-        }
-    }
-    return sum;
+    return std::accumulate(nums.begin(), nums.end(), 0, [](int sum, int n) {
+        return n <= 1000 ? sum + n : sum;
+    });
 }
 
 void StringCalculator::validateNumbers(const std::vector<int>& nums) {
@@ -127,13 +124,8 @@ void StringCalculator::validateNumbers(const std::vector<int>& nums) {
 
 std::vector<int> StringCalculator::findNegativeNumbers(const std::vector<int>& nums) {
     std::vector<int> negatives;
-
-    for (int num : nums) {
-        if (num < 0) {
-            negatives.push_back(num);
-        }
-    }
-
+    std::copy_if(nums.begin(), nums.end(), std::back_inserter(negatives),
+                 [](int num) { return num < 0; });
     return negatives;
 }
 
