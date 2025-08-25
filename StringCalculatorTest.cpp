@@ -6,7 +6,6 @@
 
 class StringCalculatorTest : public ::testing::Test {
  protected:
-    // cppcheck-suppress unusedStructMember
     StringCalculator calculator;  // Used in test methods below
 };
 

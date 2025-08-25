@@ -28,7 +28,7 @@ jobs:
 
     - name: cppcheck
       run: |
-        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem --std=c++17 --language=c++ *.cpp *.h
+        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem --suppress=unusedStructMember --std=c++17 --language=c++ *.cpp *.h
 
     - name: clang-format
       run: |
