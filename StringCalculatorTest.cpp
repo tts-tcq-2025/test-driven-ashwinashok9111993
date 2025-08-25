@@ -32,15 +32,22 @@ TEST_F(StringCalculatorTest, EmptyStringReturnsZero) {
     EXPECT_EQ(0, calculator.Add(""));
 }
 
-// Parameterized test for basic addition scenarios
-class BasicAdditionTest : public ::testing::TestWithParam<BasicAdditionData> {
+// Base template for parameterized tests with common test pattern
+template<typename TestDataType>
+class ParameterizedCalculatorTest : public ::testing::TestWithParam<TestDataType> {
  protected:
     StringCalculator calculator;
+
+    void TestCalculatorExpectation(const TestDataType& data) {
+        EXPECT_EQ(data.expected, calculator.Add(data.input)) << "Failed for: " << data.description;
+    }
 };
 
+// Parameterized test for basic addition scenarios
+class BasicAdditionTest : public ParameterizedCalculatorTest<BasicAdditionData> {};
+
 TEST_P(BasicAdditionTest, HandlesVariousInputs) {
-    const auto& data = GetParam();
-    EXPECT_EQ(data.expected, calculator.Add(data.input)) << "Failed for: " << data.description;
+    TestCalculatorExpectation(GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -60,14 +67,10 @@ INSTANTIATE_TEST_SUITE_P(
 );
 
 // Parameterized test for delimiter scenarios
-class DelimiterTest : public ::testing::TestWithParam<CustomDelimiterData> {
- protected:
-    StringCalculator calculator;
-};
+class DelimiterTest : public ParameterizedCalculatorTest<CustomDelimiterData> {};
 
 TEST_P(DelimiterTest, HandlesVariousDelimiters) {
-    const auto& data = GetParam();
-    EXPECT_EQ(data.expected, calculator.Add(data.input)) << "Failed for: " << data.description;
+    TestCalculatorExpectation(GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(
@@ -91,14 +94,10 @@ INSTANTIATE_TEST_SUITE_P(
 );
 
 // Parameterized test for large number filtering
-class LargeNumberFilterTest : public ::testing::TestWithParam<BasicAdditionData> {
- protected:
-    StringCalculator calculator;
-};
+class LargeNumberFilterTest : public ParameterizedCalculatorTest<BasicAdditionData> {};
 
 TEST_P(LargeNumberFilterTest, FiltersLargeNumbers) {
-    const auto& data = GetParam();
-    EXPECT_EQ(data.expected, calculator.Add(data.input)) << "Failed for: " << data.description;
+    TestCalculatorExpectation(GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(
